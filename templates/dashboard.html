@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your ZenSync Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Your ZenSync Results</h1>
+        
+        <div class="user-info">
+            <h2>Welcome, {{ data.user_data.name }}!</h2>
+        </div>
+        
+        <div class="results-graph">
+            <div id="scoreChart"></div>
+        </div>
+        
+        <div class="winner-section">
+            <h3>Your Most Relaxing Video: {{ data.winner_video }}</h3>
+        </div>
+    </div>
+    
+    <script>
+        const scores = {{ data.scores|tojson }};
+        const videos = Object.keys(scores);
+        const values = Object.values(scores);
+        
+        Plotly.newPlot('scoreChart', [{
+            x: videos,
+            y: values,
+            type: 'bar',
+            marker: {
+                color: 'royalblue'
+            }
+        }], {
+            title: 'Your Relaxation Scores',
+            xaxis: { title: 'Video' },
+            yaxis: { title: 'Relaxation Index' }
+        });
+    </script>
+</body>
+</html> 
