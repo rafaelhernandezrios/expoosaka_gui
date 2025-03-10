@@ -1,0 +1,47 @@
+# Ignorar todo por defecto
+*
+
+# No ignorar archivos específicos necesarios para la web platform
+!app.py
+!database.py
+!requirements.txt
+!Procfile
+!.gitignore
+
+# No ignorar directorios necesarios y su contenido
+!static/
+!static/**
+!templates/
+!templates/**
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos específicos del proyecto a ignorar
+gui.py
+qr_generator.py
+qr_viewer.py
+lsl_detector.py
+scores.db
+qr_codes/
+src/
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de ambiente
+.env
+.env.local 
