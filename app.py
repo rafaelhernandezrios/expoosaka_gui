@@ -49,9 +49,14 @@ def submit_survey():
             except ValueError:
                 raise ValueError("Age must be a number")
         
-        # Guardar en MongoDB
-        db.save_user_data(session_id, user_data)
-        return redirect(url_for('dashboard', session_id=session_id))
+        # Guardar en MongoDB con manejo de timeout
+        try:
+            db.save_user_data(session_id, user_data)
+            return redirect(url_for('dashboard', session_id=session_id))
+        except Exception as db_error:
+            app.logger.error(f"Database error: {str(db_error)}")
+            return render_template('error.html', 
+                                error="Database connection error. Please try again in a few moments.")
     
     except ValueError as ve:
         app.logger.error(f"Validation error: {str(ve)}")
