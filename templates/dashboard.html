@@ -1,56 +1,147 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Survey Dashboard</title>
+    <title>Expo Osaka 2025 - Results Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <div class="japanese-pattern"></div>
     <div class="container">
-        <h1>Survey Results Dashboard</h1>
-        
+        <div class="dashboard-header fade-in">
+            <img src="{{ url_for('static', filename='logo_expo2025.png') }}" alt="Expo 2025 Logo" class="expo-logo">
+            <h1>Immersive Experience Results</h1>
+            {% if data and data.user_data %}
+                <p class="badge badge-success">Session Complete</p>
+            {% endif %}
+        </div>
+
         {% if data and data.user_data %}
-            <h2>Welcome, {{ data.user_data.name }}!</h2>
-            
-            <div class="survey-data">
-                <h3>Personal Information</h3>
-                <p><strong>Age:</strong> {{ data.user_data.age }}</p>
-                <p><strong>Gender:</strong> {{ data.user_data.gender }}</p>
-                
-                <h3>Survey Responses</h3>
-                <p><strong>Comfort Level:</strong> {{ data.user_data.comfort }}</p>
-                <p><strong>Experience Rating:</strong> {{ data.user_data.experience }}</p>
-                <p><strong>Would Recommend:</strong> {{ data.user_data.recommendation }}</p>
-                {% if data.user_data.comments %}
-                    <p><strong>Additional Comments:</strong><br>
-                    {{ data.user_data.comments }}</p>
-                {% endif %}
+            <div class="card fade-in">
+                <h2>Participant Information</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Name</div>
+                        <div class="stat-value">{{ data.user_data.name }}</div>
+                    </div>
+                    {% if data.user_data.age %}
+                    <div class="stat-card">
+                        <div class="stat-label">Age</div>
+                        <div class="stat-value">{{ data.user_data.age }}</div>
+                    </div>
+                    {% endif %}
+                    {% if data.user_data.gender %}
+                    <div class="stat-card">
+                        <div class="stat-label">Gender</div>
+                        <div class="stat-value">{{ data.user_data.gender|title }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card fade-in">
+                <h2>Experience Feedback</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Comfort Level</div>
+                        <div class="stat-value">{{ data.user_data.comfort|replace('_', ' ')|title }}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Experience Rating</div>
+                        <div class="stat-value">{{ data.user_data.experience|replace('_', ' ')|title }}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Would Recommend</div>
+                        <div class="stat-value">{{ data.user_data.recommendation|replace('_', ' ')|title }}</div>
+                    </div>
+                </div>
             </div>
 
             {% if data.scores %}
-            <div class="eeg-data">
-                <h3>EEG Session Results</h3>
-                <p><strong>Winner Video:</strong> Video {{ data.winner_video }}</p>
-                <h4>Video Scores:</h4>
-                <ul>
-                    <li>Video 2: {{ data.scores.video2 }}</li>
-                    <li>Video 3: {{ data.scores.video3 }}</li>
-                    <li>Video 4: {{ data.scores.video4 }}</li>
-                    <li>Video 5: {{ data.scores.video5 }}</li>
-                    <li>Video 6: {{ data.scores.video6 }}</li>
-                </ul>
+            <div class="card fade-in">
+                <h2>EEG Analysis Results</h2>
+                <div class="chart-container">
+                    <canvas id="relaxationChart"></canvas>
+                </div>
+                <div class="stats-grid">
+                    {% for video_num in range(2, 7) %}
+                    <div class="stat-card {% if data.winner_video == video_num %}highlight-winner{% endif %}">
+                        <div class="stat-label">Video {{ video_num }}</div>
+                        <div class="stat-value">{{ "%.2f"|format(data.scores['video' ~ video_num]) }}</div>
+                        {% if data.winner_video == video_num %}
+                        <span class="badge badge-success">Winner</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
             {% endif %}
-            
+
+            {% if data.user_data.comments %}
+            <div class="card fade-in">
+                <h2>Additional Comments</h2>
+                <p class="comments">{{ data.user_data.comments }}</p>
+            </div>
+            {% endif %}
+
         {% else %}
-            <div class="no-data">
+            <div class="card fade-in">
                 <h2>Waiting for Survey Submission</h2>
                 <p>The survey has not been submitted yet for this session.</p>
                 <p>Session ID: {{ data.session_id }}</p>
                 {% if data.error %}
-                    <p class="error">Error: {{ data.error }}</p>
+                    <div class="error-message">
+                        <p class="badge badge-warning">Error: {{ data.error }}</p>
+                    </div>
                 {% endif %}
             </div>
         {% endif %}
     </div>
+
+    {% if data and data.scores %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('relaxationChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Video 2', 'Video 3', 'Video 4', 'Video 5', 'Video 6'],
+                datasets: [{
+                    label: 'Relaxation Score',
+                    data: [
+                        {{ data.scores.video2 }},
+                        {{ data.scores.video3 }},
+                        {{ data.scores.video4 }},
+                        {{ data.scores.video5 }},
+                        {{ data.scores.video6 }}
+                    ],
+                    borderColor: '#E60012',
+                    backgroundColor: 'rgba(230, 0, 18, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Relaxation Levels Across Videos'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
 </body>
 </html> 

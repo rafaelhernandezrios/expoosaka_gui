@@ -1,26 +1,48 @@
 :root {
-    --primary: #083d5c;
-    --secondary: #2c3e50;
-    --accent: #3498db;
-    --background: #f8f9fa;
-    --text: #2c3e50;
+    --primary: #E60012; /* Color rojo tradicional japonés */
+    --secondary: #1A1A1A;
+    --accent: #00A0E9; /* Azul cielo japonés */
+    --background: #F7F7F7;
+    --text: #333333;
+    --success: #4CAF50;
+    --warning: #FFC107;
+    --error: #FF5252;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Noto Sans JP', 'Segoe UI', sans-serif;
     background: var(--background);
     margin: 0;
     padding: 0;
     color: var(--text);
+    line-height: 1.6;
 }
 
 .container {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 2rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.card {
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
 }
 
 h1 {
@@ -28,8 +50,17 @@ h1 {
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
+h2 {
+    color: var(--secondary);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Formularios */
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -41,21 +72,24 @@ label {
     font-weight: 500;
 }
 
-input, select {
+input, select, textarea {
     width: 100%;
-    padding: 0.8rem;
+    padding: 1rem;
     border: 2px solid #e0e0e0;
     border-radius: 8px;
     font-size: 1rem;
-    transition: border-color 0.3s;
+    transition: all 0.3s ease;
+    background: #FFFFFF;
 }
 
-input:focus, select:focus {
+input:focus, select:focus, textarea:focus {
     border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0, 160, 233, 0.1);
     outline: none;
 }
 
-button {
+/* Botones */
+.btn {
     background: var(--primary);
     color: white;
     padding: 1rem 2rem;
@@ -63,13 +97,117 @@ button {
     border-radius: 8px;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: transform 0.2s;
-    width: 100%;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
 }
 
-button:hover {
+.btn:hover {
     transform: translateY(-2px);
-    background: #0a4b73;
+    box-shadow: 0 4px 8px rgba(230, 0, 18, 0.2);
+}
+
+/* Dashboard específico */
+.dashboard-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #FF4B2B 100%);
+    color: white;
+    padding: 3rem 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin: 0.5rem 0;
+}
+
+.stat-label {
+    color: var(--secondary);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Gráficos y visualizaciones */
+.chart-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    margin: 2rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animaciones y transiciones */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Badges y estados */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.badge-success {
+    background: rgba(76, 175, 80, 0.1);
+    color: var(--success);
+}
+
+.badge-warning {
+    background: rgba(255, 193, 7, 0.1);
+    color: var(--warning);
+}
+
+/* Expo Osaka específico */
+.expo-logo {
+    max-width: 200px;
+    margin: 0 auto 2rem;
+    display: block;
+}
+
+.japanese-pattern {
+    background-image: url('data:image/svg+xml,...'); /* Patrón japonés sutil */
+    opacity: 0.05;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
 }
 
 .results-graph {

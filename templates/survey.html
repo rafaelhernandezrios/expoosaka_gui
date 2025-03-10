@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Experience Survey</title>
+    <title>Expo Osaka 2025 - Experience Survey</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         .required {
             color: red;
@@ -10,75 +12,89 @@
     </style>
 </head>
 <body>
+    <div class="japanese-pattern"></div>
     <div class="container">
-        <h1>Experience Survey</h1>
-        <form action="{{ url_for('submit_survey') }}" method="POST">
-            <input type="hidden" name="session_id" value="{{ session_id }}">
-            
-            <div class="form-group">
-                <label>Name <span class="required">*</span></label>
-                <input type="text" name="name" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Age</label>
-                <input type="number" name="age" min="1" max="120">
-            </div>
-            
-            <div class="form-group">
-                <label>Gender</label>
-                <select name="gender">
-                    <option value="">Select...</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                    <option value="prefer_not_to_say">Prefer not to say</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Comfort Level <span class="required">*</span></label>
-                <select name="comfort" required>
-                    <option value="">Select...</option>
-                    <option value="very_comfortable">Very Comfortable</option>
-                    <option value="comfortable">Comfortable</option>
-                    <option value="neutral">Neutral</option>
-                    <option value="uncomfortable">Uncomfortable</option>
-                    <option value="very_uncomfortable">Very Uncomfortable</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Experience Rating <span class="required">*</span></label>
-                <select name="experience" required>
-                    <option value="">Select...</option>
-                    <option value="excellent">Excellent</option>
-                    <option value="good">Good</option>
-                    <option value="fair">Fair</option>
-                    <option value="poor">Poor</option>
-                    <option value="very_poor">Very Poor</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Would you recommend this experience? <span class="required">*</span></label>
-                <select name="recommendation" required>
-                    <option value="">Select...</option>
-                    <option value="definitely">Definitely</option>
-                    <option value="probably">Probably</option>
-                    <option value="maybe">Maybe</option>
-                    <option value="probably_not">Probably Not</option>
-                    <option value="definitely_not">Definitely Not</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Additional Comments</label>
-                <textarea name="comments" rows="4"></textarea>
-            </div>
-            
-            <button type="submit">Submit Survey</button>
-        </form>
+        <div class="dashboard-header fade-in">
+            <img src="{{ url_for('static', filename='logo_expo2025.png') }}" alt="Expo 2025 Logo" class="expo-logo">
+            <h1>Immersive Experience Survey</h1>
+            <p>Share your thoughts about your experience</p>
+        </div>
+
+        <div class="card fade-in">
+            <form action="{{ url_for('submit_survey') }}" method="POST" class="survey-form">
+                <input type="hidden" name="session_id" value="{{ session_id }}">
+                
+                <div class="form-group">
+                    <label>Name <span class="required">*</span></label>
+                    <input type="text" name="name" required 
+                           placeholder="Enter your name" class="input-field">
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" name="age" min="1" max="120" 
+                               placeholder="Your age" class="input-field">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select name="gender" class="input-field">
+                            <option value="">Select...</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                            <option value="prefer_not_to_say">Prefer not to say</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Comfort Level <span class="required">*</span></label>
+                    <select name="comfort" required class="input-field">
+                        <option value="">Select...</option>
+                        <option value="very_comfortable">Very Comfortable</option>
+                        <option value="comfortable">Comfortable</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="uncomfortable">Uncomfortable</option>
+                        <option value="very_uncomfortable">Very Uncomfortable</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Experience Rating <span class="required">*</span></label>
+                    <select name="experience" required class="input-field">
+                        <option value="">Select...</option>
+                        <option value="excellent">Excellent</option>
+                        <option value="good">Good</option>
+                        <option value="fair">Fair</option>
+                        <option value="poor">Poor</option>
+                        <option value="very_poor">Very Poor</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Would you recommend this experience? <span class="required">*</span></label>
+                    <select name="recommendation" required class="input-field">
+                        <option value="">Select...</option>
+                        <option value="definitely">Definitely</option>
+                        <option value="probably">Probably</option>
+                        <option value="maybe">Maybe</option>
+                        <option value="probably_not">Probably Not</option>
+                        <option value="definitely_not">Definitely Not</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Additional Comments</label>
+                    <textarea name="comments" rows="4" 
+                              placeholder="Share your thoughts about the experience..." 
+                              class="input-field"></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Submit Survey</button>
+            </form>
+        </div>
     </div>
 </body>
 </html> 
