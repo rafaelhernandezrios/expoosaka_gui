@@ -25,6 +25,9 @@ def survey(session_id):
 def submit_survey():
     try:
         session_id = request.form.get('session_id')
+        if not session_id:
+            raise ValueError("Session ID is required")
+
         user_data = {
             'name': request.form.get('name'),
             'age': request.form.get('age'),
@@ -35,12 +38,28 @@ def submit_survey():
             'comments': request.form.get('comments')
         }
         
+        # Validar datos requeridos
+        if not user_data['name']:
+            raise ValueError("Name is required")
+        
+        # Convertir age a entero si existe
+        if user_data['age']:
+            try:
+                user_data['age'] = int(user_data['age'])
+            except ValueError:
+                raise ValueError("Age must be a number")
+        
         # Guardar en MongoDB
         db.save_user_data(session_id, user_data)
         return redirect(url_for('dashboard', session_id=session_id))
+    
+    except ValueError as ve:
+        app.logger.error(f"Validation error: {str(ve)}")
+        return render_template('error.html', error=str(ve))
     except Exception as e:
         app.logger.error(f"Error submitting survey: {str(e)}")
-        return render_template('error.html', error=str(e))
+        return render_template('error.html', 
+                             error="An error occurred while submitting the survey. Please try again.")
 
 @app.route('/dashboard/<session_id>')
 def dashboard(session_id):
