@@ -1,5 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QFrame, QSizePolicy
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, 
+                            QPushButton, QFrame, QSizePolicy, QGraphicsDropShadowEffect)
 from PyQt5.QtGui import QPixmap, QFont, QPalette, QColor
 from PyQt5.QtCore import Qt
 import webbrowser
@@ -13,7 +14,7 @@ class QRViewer(QMainWindow):
         
     def initUI(self):
         self.setWindowTitle('Survey QR Code')
-        self.setMinimumSize(400, 1050)  # Tamaño mínimo para asegurar legibilidad
+        self.setMinimumSize(400, 500)  # Tamaño mínimo para asegurar legibilidad
         self.setStyleSheet("""
             QMainWindow {
                 background-color: #f5f7fa;
@@ -58,6 +59,14 @@ class QRViewer(QMainWindow):
                 border-radius: 18px;
             }
         """)
+        
+        # Añadir efecto de sombra usando QGraphicsDropShadowEffect
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(15)
+        shadow.setColor(QColor(0, 0, 0, 30))  # Color negro con 30% de opacidad
+        shadow.setOffset(0, 4)
+        container.setGraphicsEffect(shadow)
+        
         layout = QVBoxLayout(container)
         layout.setSpacing(25)
         layout.setContentsMargins(30, 40, 30, 40)
