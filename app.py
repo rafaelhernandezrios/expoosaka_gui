@@ -23,26 +23,40 @@ def survey(session_id):
 
 @app.route('/submit_survey', methods=['POST'])
 def submit_survey():
-    session_id = request.form['session_id']
-    user_data = {
-        'name': request.form['name'],
-        'email': request.form['email'],
-        'gender': request.form['gender'],
-        'country': request.form['country'],
-        'feedback': {
-            'experience': int(request.form['experience']),
-            'comfort': int(request.form['comfort']),
-            'would_recommend': request.form['would_recommend'] == 'yes'
+    try:
+        session_id = request.form.get('session_id')
+        user_data = {
+            'name': request.form.get('name'),
+            'age': request.form.get('age'),
+            'gender': request.form.get('gender'),
+            'comfort': request.form.get('comfort'),
+            'experience': request.form.get('experience'),
+            'recommendation': request.form.get('recommendation'),
+            'comments': request.form.get('comments')
         }
-    }
-    
-    db.save_user_data(session_id, user_data)
-    return redirect(url_for('dashboard', session_id=session_id))
+        
+        # Guardar en MongoDB
+        db.save_user_data(session_id, user_data)
+        return redirect(url_for('dashboard', session_id=session_id))
+    except Exception as e:
+        app.logger.error(f"Error submitting survey: {str(e)}")
+        return render_template('error.html', error=str(e))
 
 @app.route('/dashboard/<session_id>')
 def dashboard(session_id):
-    session_data = db.db.sessions.find_one({'session_id': session_id})
-    return render_template('dashboard.html', data=session_data)
+    try:
+        # Obtener datos de MongoDB
+        session_data = db.get_session_data(session_id)
+        if not session_data:
+            session_data = {
+                'user_data': None,
+                'session_id': session_id
+            }
+        return render_template('dashboard.html', data=session_data)
+    except Exception as e:
+        app.logger.error(f"Error in dashboard: {str(e)}")
+        return render_template('dashboard.html', 
+                             data={'user_data': None, 'error': str(e)})
 
 # Ensure the qr_codes directory exists
 if not os.path.exists('qr_codes'):

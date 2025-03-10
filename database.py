@@ -37,4 +37,13 @@ class Database:
                     'survey_completed': True
                 }
             }
-        ) 
+        )
+        
+    def get_session_data(self, session_id):
+        """Retrieves session data including survey responses"""
+        session = self.db.sessions.find_one({'session_id': session_id})
+        if session:
+            # Convertir ObjectId a str para serialización JSON
+            session['_id'] = str(session['_id'])
+            return session
+        return None 

@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your ZenSync Results</title>
+    <title>Survey Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Your ZenSync Results</h1>
+        <h1>Survey Results Dashboard</h1>
         
-        <div class="user-info">
+        {% if data and data.user_data %}
             <h2>Welcome, {{ data.user_data.name }}!</h2>
-        </div>
-        
-        <div class="results-graph">
-            <div id="scoreChart"></div>
-        </div>
-        
-        <div class="winner-section">
-            <h3>Your Most Relaxing Video: {{ data.winner_video }}</h3>
-        </div>
+            
+            <div class="survey-data">
+                <h3>Personal Information</h3>
+                <p><strong>Age:</strong> {{ data.user_data.age }}</p>
+                <p><strong>Gender:</strong> {{ data.user_data.gender }}</p>
+                
+                <h3>Survey Responses</h3>
+                <p><strong>Comfort Level:</strong> {{ data.user_data.comfort }}</p>
+                <p><strong>Experience Rating:</strong> {{ data.user_data.experience }}</p>
+                <p><strong>Would Recommend:</strong> {{ data.user_data.recommendation }}</p>
+                {% if data.user_data.comments %}
+                    <p><strong>Additional Comments:</strong><br>
+                    {{ data.user_data.comments }}</p>
+                {% endif %}
+            </div>
+
+            {% if data.scores %}
+            <div class="eeg-data">
+                <h3>EEG Session Results</h3>
+                <p><strong>Winner Video:</strong> Video {{ data.winner_video }}</p>
+                <h4>Video Scores:</h4>
+                <ul>
+                    <li>Video 2: {{ data.scores.video2 }}</li>
+                    <li>Video 3: {{ data.scores.video3 }}</li>
+                    <li>Video 4: {{ data.scores.video4 }}</li>
+                    <li>Video 5: {{ data.scores.video5 }}</li>
+                    <li>Video 6: {{ data.scores.video6 }}</li>
+                </ul>
+            </div>
+            {% endif %}
+            
+        {% else %}
+            <div class="no-data">
+                <h2>Waiting for Survey Submission</h2>
+                <p>The survey has not been submitted yet for this session.</p>
+                <p>Session ID: {{ data.session_id }}</p>
+                {% if data.error %}
+                    <p class="error">Error: {{ data.error }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
-    
-    <script>
-        const scores = {{ data.scores|tojson }};
-        const videos = Object.keys(scores);
-        const values = Object.values(scores);
-        
-        Plotly.newPlot('scoreChart', [{
-            x: videos,
-            y: values,
-            type: 'bar',
-            marker: {
-                color: 'royalblue'
-            }
-        }], {
-            title: 'Your Relaxation Scores',
-            xaxis: { title: 'Video' },
-            yaxis: { title: 'Relaxation Index' }
-        });
-    </script>
 </body>
 </html> 
