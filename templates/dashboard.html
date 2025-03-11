@@ -110,11 +110,11 @@
                 datasets: [{
                     label: 'Relaxation Score',
                     data: [
-                        {{ data.scores.video2 }},
-                        {{ data.scores.video3 }},
-                        {{ data.scores.video4 }},
-                        {{ data.scores.video5 }},
-                        {{ data.scores.video6 }}
+                        parseFloat("{{ data.scores.video2 }}"),
+                        parseFloat("{{ data.scores.video3 }}"),
+                        parseFloat("{{ data.scores.video4 }}"),
+                        parseFloat("{{ data.scores.video5 }}"),
+                        parseFloat("{{ data.scores.video6 }}")
                     ],
                     borderColor: '#E60012',
                     backgroundColor: 'rgba(230, 0, 18, 0.1)',
