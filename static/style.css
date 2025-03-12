@@ -1,9 +1,9 @@
 :root {
-    --primary: #f7e7e9; /* Color rojo tradicional japonés */
-    --secondary: #1A1A1A;
+    --primary: #fe7c7c; /* Color rojo tradicional japonés */
+    --secondary: #211b1b;
     --accent: #00A0E9; /* Azul cielo japonés */
     --background: #F7F7F7;
-    --text: #333333;
+    --text: #f4c7c7;
     --success: #4CAF50;
     --warning: #FFC107;
     --error: #FF5252;
@@ -46,7 +46,7 @@ body {
 }
 
 h1 {
-    color: var(--primary);
+    color: var(--secondary);
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 2rem;
@@ -90,7 +90,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Botones */
 .btn {
-    background: var(--primary);
+    background: var(--secondary);
     color: white;
     padding: 1rem 2rem;
     border: none;
@@ -149,7 +149,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Gráficos y visualizaciones */
 .chart-container {
-    background: white;
+    background: rgb(241, 234, 234);
     padding: 1.5rem;
     border-radius: 15px;
     box-shadow: var(--shadow);
