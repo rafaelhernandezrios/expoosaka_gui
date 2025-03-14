@@ -68,7 +68,7 @@
                     {% for video_num in range(2, 7) %}
                     <div class="stat-card {% if data.winner_video == video_num %}highlight-winner{% endif %}">
                         <div class="stat-label">ビデオ {{ video_num-1 }} (Video {{ video_num-1 }})</div>
-                        <div class="stat-value">{{ "%.2f"|format(data.scores['video' ~ video_num]) }}</div>
+                        <div class="stat-value">{{ "%.2f"|format(data.scores["video" ~ video_num]) }}</div>
                         {% if data.winner_video == video_num %}
                         <span class="badge badge-success">優勝者 (Winner)</span>
                         {% endif %}
