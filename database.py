@@ -22,7 +22,7 @@ class Database:
         connection_string = (
             f"mongodb+srv://{username}:{password}@mirai.77p1r.mongodb.net/"
             "expoosaka?retryWrites=true&w=majority&appName=Mirai"
-            "&maxPoolSize=50&waitQueueTimeoutMS=5000&connectTimeoutMS=10000"
+            "&maxPoolSize=50&waitQueueTimeoutMS=10000&connectTimeoutMS=20000"
         )
 
         for attempt in range(self.max_retries):
@@ -36,7 +36,7 @@ class Database:
                 self.db = self.client['expoosaka']
                 logging.info("Successfully connected to MongoDB")
                 return
-            except Exception as e:
+            except errors.ServerSelectionTimeoutError as e:
                 logging.error(f"Attempt {attempt + 1}/{self.max_retries} failed: {str(e)}")
                 if attempt < self.max_retries - 1:
                     time.sleep(self.retry_delay)
@@ -60,16 +60,21 @@ class Database:
         for attempt in range(self.max_retries):
             try:
                 self._ensure_connection()
+                
+                # Verificar que videos_avg tenga al menos 5 elementos
+                if len(videos_avg) < 5:
+                    raise ValueError(f"videos_avg tiene menos de 5 elementos: {videos_avg}")
+                
                 session_id = str(uuid.uuid4())
                 session = {
                     'session_id': session_id,
                     'timestamp': datetime.now(),
                     'scores': {
-                        'video2': videos_avg[1],
-                        'video3': videos_avg[2],
-                        'video4': videos_avg[3],
-                        'video5': videos_avg[4],
-                        'video6': videos_avg[5]
+                        'video2': videos_avg[0],  # Corresponde al primer video de interés
+                        'video3': videos_avg[1],
+                        'video4': videos_avg[2],
+                        'video5': videos_avg[3],
+                        'video6': videos_avg[4]   # Corresponde al último video de interés
                     },
                     'winner_video': winner_idx + 1 if winner_idx != -1 else None,
                     'survey_completed': False,
